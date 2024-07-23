@@ -3,3 +3,5 @@
 ![License](https://badgen.net/badge/license/MIT/green)
 
 # Cell-Raylib
+
+A Simple Cell game inspired by agar.io
