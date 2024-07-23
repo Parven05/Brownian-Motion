@@ -4,4 +4,4 @@
 
 # Cell-Raylib
 
-A Simple Cell game inspired by agar.io
+A Simple Cell game inspired by Agar.io
