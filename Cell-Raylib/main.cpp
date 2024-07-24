@@ -141,7 +141,6 @@ int main()
 		DrawFPS(20,20);
 		// DrawText("Brownian Motion", 20, 40, 40, GREEN);
 
-
 		EndDrawing();
 	}
 	CloseWindow();
