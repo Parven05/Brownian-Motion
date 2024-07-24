@@ -9,8 +9,9 @@ public:
 	void Move(float dt);
 
 public:
-	int radius = 20;
-	Color color = Color{ 238, 78, 78, 255 };
+	int radius = 10;
+	Color color = WHITE;
+	Vector2 startPosition;
 	Vector2 position;
 	Vector2 velocity;
 	float mass;

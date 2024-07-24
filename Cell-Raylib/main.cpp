@@ -1,69 +1,6 @@
-#include "particle.h"
-
-void WindowCollision(Particle& particle)
-{
-	// Check for collision with left and right walls
-	if (particle.position.x - particle.radius < 0)
-	{
-		particle.position.x = particle.radius;
-		particle.velocity.x = -particle.velocity.x;
-	}
-	else if (particle.position.x + particle.radius > GetScreenWidth())
-	{
-		particle.position.x = GetScreenWidth() - particle.radius;
-		particle.velocity.x = -particle.velocity.x;
-	}
-
-	// Check for collision with top and bottom walls
-	if (particle.position.y - particle.radius < 0)
-	{
-		particle.position.y = particle.radius;
-		particle.velocity.y = -particle.velocity.y;
-	}
-	else if (particle.position.y + particle.radius > GetScreenHeight())
-	{
-		particle.position.y = GetScreenHeight() - particle.radius;
-		particle.velocity.y = -particle.velocity.y;
-	}
-}
-
-void ResolveCollision(Particle& a, Particle& b)
-{
-	Vector2 dxdy = Vector2{ b.position.x - a.position.x, b.position.y - a.position.y };
-	float dx = dxdy.x;
-	float dy = dxdy.y;
-	float distance = std::sqrt(dx * dx + dy * dy);
-	float totalRadius = a.radius + b.radius;
-
-	if (distance < totalRadius)
-	{
-		// Calculate the collision angle
-		float angle = std::atan2(dy, dx);
-
-		// Rotate the velocity vectors to the collision coordinate system
-		float v1x = a.velocity.x * std::cos(angle) + a.velocity.y * std::sin(angle);
-		float v1y = a.velocity.y * std::cos(angle) - a.velocity.x * std::sin(angle);
-		float v2x = b.velocity.x * std::cos(angle) + b.velocity.y * std::sin(angle);
-		float v2y = b.velocity.y * std::cos(angle) - b.velocity.x * std::sin(angle);
-
-		// Apply 1D collision equation along the x-axis
-		float v1PrimeX = (v1x * (a.mass - b.mass) + 2 * b.mass * v2x) * a.restitution / (a.mass + b.mass);
-		float v2PrimeX = (v2x * (b.mass - a.mass) + 2 * a.mass * v1x) * b.restitution / (a.mass + b.mass);
-
-		// Rotate the velocities back to the original coordinate system
-		a.velocity.x = v1PrimeX * std::cos(-angle) + v1y * std::sin(-angle);
-		a.velocity.y = v1y * std::cos(-angle) - v1PrimeX * std::sin(-angle);
-		b.velocity.x = v2PrimeX * std::cos(-angle) + v2y * std::sin(-angle);
-		b.velocity.y = v2y * std::cos(-angle) - v2PrimeX * std::sin(-angle);
-
-		// Adjust positions to prevent sticking
-		float overlap = 0.5f * (totalRadius - distance + 1.0f);  // Add a small value to avoid precision issues
-		Vector2 displacement = Vector2{ overlap * std::cos(angle), overlap * std::sin(angle) };
-		a.position = Vector2Subtract(a.position, Vector2Scale(displacement, 1.0f));
-		a.position = Vector2Subtract(a.position, Vector2Scale(displacement, 1.0f));
-		b.position = Vector2Add(b.position, Vector2Scale(displacement, 1.0f));
-	}
-}
+#include "solver.h"
+#include "imgui.h"
+#include "rlImGui.h"
 
 int main()
 {
@@ -77,32 +14,56 @@ int main()
 
 	InitWindow(width, height, "Cell");
 	
-	srand(static_cast<unsigned>(time(0)));
+	rlImGuiSetup(true);
 
 	//-------------------------------------------------------------------------------------
 
-	const int totalCells = 150;
+	const int totalCells = 500;
 
 	Particle particles[totalCells];
+	Solver solver;
+
+	int temperature = 0.0f;
+
+	srand(static_cast<unsigned>(time(0)));
 
 	for (int i = 0; i < totalCells; i++)
 	{
 		particles[i].position = Vector2{
-			  static_cast<float>(rand() % GetScreenWidth()),
-			  static_cast<float>(rand() % GetScreenHeight())
+			static_cast<float>(rand() % GetScreenWidth()),
+			static_cast<float>(rand() % GetScreenHeight())
 		};
 		particles[i].velocity = Vector2{
-			 static_cast<float>(rand() % (200 - 100 + 1) + 100),
-			 static_cast<float>(rand() % (200 - 100 + 1) + 100)
+			static_cast<float>(rand() % (temperature - 100 + 1) + 100),
+			static_cast<float>(rand() % (temperature - 100 + 1) + 100)
 		};
 		particles[i].active = true;
 
 		if (i == 1)
 		{
-			particles[i].radius = 60;
-			particles[i].color = Color{ 255, 199, 0, 255 };
+			particles[i].radius = 40;
+			particles[i].color = GREEN;
 		}
 
+		else if (i == 2)
+		{
+			particles[i].radius = 40;
+			particles[i].color = YELLOW;
+		}
+
+		else if (i == 3)
+		{
+			particles[i].radius = 40;
+			particles[i].color = BLUE;
+		}
+
+		else if (i == 4)
+		{
+			particles[i].radius = 40;
+			particles[i].color = RED;
+		}
+
+		particles[i].startPosition = particles[i].position;
 	}
 
 	// EVENT -----------------------------------------------------------------------------
@@ -111,9 +72,17 @@ int main()
 	{
 		const float deltaTime = GetFrameTime();
 
-		ClearBackground(RAYWHITE);
+		ClearBackground(Color{ 17,11,17, 255});
 
-		BeginDrawing();
+		BeginDrawing();	
+
+		rlImGuiBegin();
+		ImGui::SetNextWindowPos(ImVec2(0, 700));
+		ImGui::SetNextWindowSize(ImVec2(280, 100));
+		ImGui::Begin("Simulation Parameters", nullptr, ImGuiWindowFlags_NoResize);
+
+		ImGui::Text("FPS: %d", GetFPS());
+		ImGui::SliderInt("Temperature", &temperature, 100, 200);
 
 		for (int i = 0; i < totalCells; ++i)
 		{
@@ -121,7 +90,12 @@ int main()
 			{
 				particles[i].Move(deltaTime);
 				DrawCircle(particles[i].position.x, particles[i].position.y, particles[i].radius, particles[i].color);
-				WindowCollision(particles[i]);
+				solver.WindowCollision(particles[i]);
+
+				if (particles[i].radius == 40)
+				{
+					DrawLineV(particles[i].startPosition, particles[i].position, particles[i].color);
+				}
 				
 				for (int j = i + 1; j < totalCells; ++j)
 				{
@@ -129,18 +103,19 @@ int main()
 					{
 						if (CheckCollisionCircles(particles[j].position, particles[j].radius, particles[i].position, particles[i].radius))
 						{
-							ResolveCollision(particles[j], particles[i]);
+							solver.CircleCollision(particles[j], particles[i]);
 						}
 					}
 				}
+
+				
 
 			}
 			
 		}
 
-		DrawFPS(20,20);
-		// DrawText("Brownian Motion", 20, 40, 40, GREEN);
-
+		ImGui::End();
+		rlImGuiEnd();
 		EndDrawing();
 	}
 	CloseWindow();
