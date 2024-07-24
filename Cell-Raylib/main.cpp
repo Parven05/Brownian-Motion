@@ -81,11 +81,9 @@ int main()
 
 	//-------------------------------------------------------------------------------------
 
-	const float mouseSensitivity = 5.0f;
 	const int totalCells = 150;
 
 	Particle particles[totalCells];
-	//Player player(Vector2{200, 200}, 50);
 
 	for (int i = 0; i < totalCells; i++)
 	{
@@ -115,12 +113,7 @@ int main()
 
 		ClearBackground(RAYWHITE);
 
-		Vector2 mousePos = GetMousePosition();
-		//player.position = Vector2MoveTowards(player.position, mousePos, mouseSensitivity);
-
 		BeginDrawing();
-
-		//DrawCircle(player.position.x, player.position.y, player.radius, BLUE);
 
 		for (int i = 0; i < totalCells; ++i)
 		{
@@ -141,15 +134,7 @@ int main()
 					}
 				}
 
-			/*	if (CheckCollisionCircles(player.position, player.radius, particles[i].position, particles[i].radius))
-				{
-					particles[i].active = false;
-					player.radius += 1;
-				}
-
-				*/
 			}
-
 			
 		}
 
