@@ -6,4 +6,5 @@
 
 A Simple Simulation that demonstrates Brownian Motion
 
-![cell](https://github.com/user-attachments/assets/8aabebec-04ee-4284-a4a8-c239cae2b387)
+![cell](https://github.com/user-attachments/assets/4ef4f1c1-24a2-4c36-a8e5-f54a2fcdd17e)
+
