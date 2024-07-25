@@ -1,6 +1,4 @@
 #include "solver.h"
-#include "imgui.h"
-#include "rlImGui.h"
 
 int main()
 {
@@ -13,8 +11,6 @@ int main()
 	SetConfigFlags(FLAG_MSAA_4X_HINT);
 
 	InitWindow(width, height, "Cell");
-	
-	rlImGuiSetup(true);
 
 	//-------------------------------------------------------------------------------------
 
@@ -22,8 +18,6 @@ int main()
 
 	Particle particles[totalCells];
 	Solver solver;
-
-	int temperature = 0.0f;
 
 	srand(static_cast<unsigned>(time(0)));
 
@@ -34,8 +28,8 @@ int main()
 			static_cast<float>(rand() % GetScreenHeight())
 		};
 		particles[i].velocity = Vector2{
-			static_cast<float>(rand() % (temperature - 100 + 1) + 100),
-			static_cast<float>(rand() % (temperature - 100 + 1) + 100)
+			static_cast<float>(rand() % (200 - 100 + 1) + 100),
+			static_cast<float>(rand() % (200 - 100 + 1) + 100)
 		};
 		particles[i].active = true;
 
@@ -62,8 +56,6 @@ int main()
 			particles[i].radius = 40;
 			particles[i].color = RED;
 		}
-
-		particles[i].startPosition = particles[i].position;
 	}
 
 	// EVENT -----------------------------------------------------------------------------
@@ -74,16 +66,6 @@ int main()
 
 		ClearBackground(Color{ 17,11,17, 255});
 
-		BeginDrawing();	
-
-		rlImGuiBegin();
-		ImGui::SetNextWindowPos(ImVec2(0, 700));
-		ImGui::SetNextWindowSize(ImVec2(280, 100));
-		ImGui::Begin("Simulation Parameters", nullptr, ImGuiWindowFlags_NoResize);
-
-		ImGui::Text("FPS: %d", GetFPS());
-		ImGui::SliderInt("Temperature", &temperature, 100, 200);
-
 		for (int i = 0; i < totalCells; ++i)
 		{
 			if (particles[i].active)
@@ -91,11 +73,6 @@ int main()
 				particles[i].Move(deltaTime);
 				DrawCircle(particles[i].position.x, particles[i].position.y, particles[i].radius, particles[i].color);
 				solver.WindowCollision(particles[i]);
-
-				if (particles[i].radius == 40)
-				{
-					DrawLineV(particles[i].startPosition, particles[i].position, particles[i].color);
-				}
 				
 				for (int j = i + 1; j < totalCells; ++j)
 				{
@@ -108,17 +85,15 @@ int main()
 					}
 				}
 
-				
-
 			}
 			
 		}
 
-		ImGui::End();
-		rlImGuiEnd();
+		DrawFPS(5,5);
+
 		EndDrawing();
 	}
-	CloseWindow();
 
+	CloseWindow();
 };
 
