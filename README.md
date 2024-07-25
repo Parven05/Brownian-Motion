@@ -6,5 +6,7 @@
 
 A Simple Simulation that demonstrates Brownian Motion that made in Raylib
 
-![cell](https://github.com/user-attachments/assets/4ef4f1c1-24a2-4c36-a8e5-f54a2fcdd17e)
+https://github.com/user-attachments/assets/2751aa59-8e8b-4737-bdd3-47f2263d5ada
+
+
 
