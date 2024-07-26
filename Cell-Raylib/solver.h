@@ -2,6 +2,6 @@
 
 struct Solver
 {
-	void WindowCollision(Particle& particle);
-	void CircleCollision(Particle& a, Particle& b);
+	void WindowCollision(Particle& particle) const;
+	void CircleCollision(Particle& a, Particle& b) const;
 };

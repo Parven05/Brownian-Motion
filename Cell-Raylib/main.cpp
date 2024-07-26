@@ -1,99 +1,61 @@
 #include "solver.h"
 
-int main()
+void Window()
 {
-	// WINDOW -----------------------------------------------------------------------------
 	const int width = 800;
 	const int height = 800;
-	
 	SetTargetFPS(60);
-
 	SetConfigFlags(FLAG_MSAA_4X_HINT);
+	InitWindow(width, height, "Brownian Motion");
+}
 
-	InitWindow(width, height, "Cell");
-
-	//-------------------------------------------------------------------------------------
-
-	const int totalCells = 500;
-
-	Particle particles[totalCells];
-	Solver solver;
-
-	srand(static_cast<unsigned>(time(0)));
-
-	for (int i = 0; i < totalCells; i++)
+void Simulate(int totalCells, Particle* particles, Solver& solver, float deltaTime)
+{
+	for (int i = 0; i < totalCells; ++i) // Access each particle
 	{
-		particles[i].position = Vector2{
-			static_cast<float>(rand() % GetScreenWidth()),
-			static_cast<float>(rand() % GetScreenHeight())
-		};
-		particles[i].velocity = Vector2{
-			static_cast<float>(rand() % (200 - 100 + 1) + 100),
-			static_cast<float>(rand() % (200 - 100 + 1) + 100)
-		};
-		particles[i].active = true;
-
-		if (i == 1)
+		if (particles[i].active) // Check each particle is render
 		{
-			particles[i].radius = 40;
-			particles[i].color = GREEN;
+			particles[i].Move(deltaTime); // Apply Brownian Motion
+			DrawCircle(particles[i].position.x, particles[i].position.y, particles[i].radius, particles[i].color); // Draw each particle in window
+			solver.WindowCollision(particles[i]); // Apply window collision logic for each particle
+
+			for (int j = i + 1; j < totalCells; ++j) // Access each particle again
+			{
+				if (particles[j].active) // Check if the particle is render
+				{
+					if (CheckCollisionCircles(particles[j].position, particles[j].radius, particles[i].position, particles[i].radius)) // Check collision of particles themself
+					{
+						solver.CircleCollision(particles[j], particles[i]); // Apply circle collision physics to particles
+					}
+				}
+			}
+
 		}
 
-		else if (i == 2)
-		{
-			particles[i].radius = 40;
-			particles[i].color = YELLOW;
-		}
-
-		else if (i == 3)
-		{
-			particles[i].radius = 40;
-			particles[i].color = BLUE;
-		}
-
-		else if (i == 4)
-		{
-			particles[i].radius = 40;
-			particles[i].color = RED;
-		}
 	}
+}
 
-	// EVENT -----------------------------------------------------------------------------
-
+int main()
+{
+	// START ------------------------------------------------------------------------------
+	Window();
+	Solver solver;
+	const int totalCells = 500;	// Number of total particles
+	Particle particles[totalCells]; // Each particle in an array
+	particles->RandomInitialization(totalCells,particles); // Initialize random Vector2 values for each of the particle
+	srand(static_cast<unsigned>(time(0)));
+	//-------------------------------------------------------------------------------------
+	// LOOP -------------------------------------------------------------------------------
 	while (!WindowShouldClose())
 	{
 		const float deltaTime = GetFrameTime();
-
-		ClearBackground(Color{ 17,11,17, 255});
-
-		for (int i = 0; i < totalCells; ++i)
-		{
-			if (particles[i].active)
-			{
-				particles[i].Move(deltaTime);
-				DrawCircle(particles[i].position.x, particles[i].position.y, particles[i].radius, particles[i].color);
-				solver.WindowCollision(particles[i]);
-				
-				for (int j = i + 1; j < totalCells; ++j)
-				{
-					if (particles[j].active)
-					{
-						if (CheckCollisionCircles(particles[j].position, particles[j].radius, particles[i].position, particles[i].radius))
-						{
-							solver.CircleCollision(particles[j], particles[i]);
-						}
-					}
-				}
-
-			}
-			
-		}
-
+		ClearBackground(BLACK);
+		BeginDrawing();
+		Simulate(totalCells, particles, solver, deltaTime);
 		DrawFPS(5,5);
-
 		EndDrawing();
 	}
-
+	//-------------------------------------------------------------------------------------
 	CloseWindow();
 };
 

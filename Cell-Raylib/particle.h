@@ -7,14 +7,14 @@ class Particle
 public:
 	Particle();
 	void Move(float dt);
+	void RandomInitialization(int totalCells, Particle particles[]) const;
 
 public:
-	int radius = 10;
-	Color color = WHITE;
-	Vector2 startPosition;
+	int radius;
 	Vector2 position;
 	Vector2 velocity;
-	float mass;
 	bool active;
+	Color color;
+	float mass;
 	static float restitution;
 };

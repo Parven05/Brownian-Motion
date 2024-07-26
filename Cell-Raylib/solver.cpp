@@ -1,6 +1,6 @@
 #include "solver.h"
 
-void Solver::WindowCollision(Particle& particle)
+void Solver::WindowCollision(Particle& particle) const
 {
 	// Check for collision with left and right walls
 	if (particle.position.x - particle.radius < 0)
@@ -27,7 +27,7 @@ void Solver::WindowCollision(Particle& particle)
 	}
 }
 
-void Solver::CircleCollision(Particle& a, Particle& b)
+void Solver::CircleCollision(Particle& a, Particle& b) const
 {
 	Vector2 dxdy = Vector2{ b.position.x - a.position.x, b.position.y - a.position.y };
 	float dx = dxdy.x;
@@ -57,7 +57,7 @@ void Solver::CircleCollision(Particle& a, Particle& b)
 		b.velocity.y = v2y * std::cos(-angle) - v2PrimeX * std::sin(-angle);
 
 		// Adjust positions to prevent sticking
-		float overlap = 0.5f * (totalRadius - distance + 1.0f);  // Add a small value to avoid precision issues
+		float overlap = 0.5f * (totalRadius - distance + 1.0f);
 		Vector2 displacement = Vector2{ overlap * std::cos(angle), overlap * std::sin(angle) };
 		a.position = Vector2Subtract(a.position, Vector2Scale(displacement, 1.0f));
 		a.position = Vector2Subtract(a.position, Vector2Scale(displacement, 1.0f));
