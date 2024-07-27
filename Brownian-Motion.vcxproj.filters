@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="particle.cpp">
+    <ClCompile Include="src\particle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="solver.cpp">
+    <ClCompile Include="src\solver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="particle.h">
+    <ClInclude Include="header\particle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="solver.h">
+    <ClInclude Include="header\solver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
