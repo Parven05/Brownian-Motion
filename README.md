@@ -8,6 +8,7 @@ https://github.com/user-attachments/assets/4db2595a-a1bf-44e8-a2be-1c9834600341
 
 ## Formula Implementation
 ![image](https://github.com/user-attachments/assets/4d1dff46-3fd7-4b25-9ab9-b9afef1dad6e)
+https://www.youtube.com/watch?v=HoarcLXun0M
 
 
 
