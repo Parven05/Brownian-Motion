@@ -9,7 +9,7 @@ void Particle::RandomInitialization(int totalCells, Particle* particles) const
 	static std::mt19937 rng(static_cast<unsigned>(time(0)));
 	static std::uniform_real_distribution<float> distPosX(0.0f, static_cast<float>(GetScreenWidth()));
 	static std::uniform_real_distribution<float> distPosY(0.0f, static_cast<float>(GetScreenHeight()));
-	static std::uniform_real_distribution<float> distVel(100.0f, 200.0f);
+	static std::uniform_real_distribution<float> distVel(50.0f, 100.0f);
 
 	for (int i = 0; i < totalCells; i++) {
 		Particle& p = particles[i];

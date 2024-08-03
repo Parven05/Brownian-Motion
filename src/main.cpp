@@ -27,6 +27,7 @@ void static Simulate(int totalCells, Particle* particles, Solver& solver, float 
 					}
 				}
 			}
+			
 		}
 	}
 }
