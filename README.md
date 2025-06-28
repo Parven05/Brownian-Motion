@@ -12,6 +12,7 @@ This project simulates Brownian motion using 2D particles in C++ with raylib. Ea
 ```math
 1. \quad \mathbf{F}_{\text{random}} = \text{RandomGaussian}(0, \sigma)
 ```
+
 ```c++
     float sigma = 15.0f;
     float randX = sigma * (GetRandomValue(-50, 50) / 100.0f);  // ~ [-7.5, 7.5]
@@ -23,6 +24,7 @@ This code simulates a random force by scaling a uniformly distributed value into
 ```math
 2. \quad \mathbf{F}_{\text{total}} = m \cdot \mathbf{g} + \mathbf{F}_{\text{random}}
 ```
+
 ```c++
     // Gravity is 0 for now (can be replaced with {0, 9.8f} later)
     Vector2 gravity = { 0, 0 };
@@ -35,6 +37,7 @@ Since gravity is set to zero, the total force equals just the random force. Howe
 3. \quad \mathbf{v} = \mathbf{v} + \frac{\mathbf{F}_{\text{total}}}{m} \cdot \Delta t
 4. \quad \mathbf{x} = \mathbf{x} + \mathbf{v} \cdot \Delta t
 ```
+
 ```c++
     // Apply Verlet Integration
     Vector2 acceleration = Vector2Scale(totalForce, 1.0f / mass);
