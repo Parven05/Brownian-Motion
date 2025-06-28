@@ -10,7 +10,7 @@ This project simulates Brownian motion using 2D particles in C++ with raylib. Ea
 ## **Implementation**
 
 ```math
-1. \quad \mathbf{F}_{\text{random}} = \text{RandomGaussian}(0, \sigma)
+\quad \mathbf{F}_{\text{random}} = \text{RandomGaussian}(0, \sigma)
 ```
 ```c++
     float sigma = 15.0f;
@@ -21,7 +21,7 @@ This project simulates Brownian motion using 2D particles in C++ with raylib. Ea
 This code simulates a random force by scaling a uniformly distributed value into a small float range. It approximates Gaussian noise by generating values between -7.5 and 7.5, creating the jittery effect typical of Brownian motion.
 
 ```math
-2. \quad \mathbf{F}_{\text{total}} = m \cdot \mathbf{g} + \mathbf{F}_{\text{random}}
+\quad \mathbf{F}_{\text{total}} = m \cdot \mathbf{g} + \mathbf{F}_{\text{random}}
 ```
 ```c++
     // Gravity is 0 for now (can be replaced with {0, 9.8f} later)
@@ -32,8 +32,8 @@ This code calculates the **total force** on the particle.
 Since gravity is set to zero, the total force equals just the random force. However, the formula still includes `m * g + F_random` to keep it flexible if gravity is added later.
 
 ```math
-3. \quad \mathbf{v} = \mathbf{v} + \frac{\mathbf{F}_{\text{total}}}{m} \cdot \Delta t
-4. \quad \mathbf{x} = \mathbf{x} + \mathbf{v} \cdot \Delta t
+\quad \mathbf{v} = \mathbf{v} + \frac{\mathbf{F}_{\text{total}}}{m} \cdot \Delta t
+\quad \mathbf{x} = \mathbf{x} + \mathbf{v} \cdot \Delta t
 ```
 ```c++
     // Apply Verlet Integration
