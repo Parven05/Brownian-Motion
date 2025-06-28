@@ -5,7 +5,7 @@
 ## **Brownian Motion**
 ![brownian](https://github.com/user-attachments/assets/e1ea43fd-0d4c-464c-8200-1a6b86bf6f10)
 
-This project simulates Brownian motion using 2D particles in C++ with raylib. Each particle moves randomly by applying small forces every frame, creating jittery, natural motion. There's no gravity—movement is driven entirely by random forces, making it ideal for visualizing microscopic particle behavior.
+This project simulates Brownian motion using 2D particles in C++ with raylib. Each particle moves randomly by applying small forces every frame, creating jittery, natural motion. There's no gravity movement is driven entirely by random forces, making it ideal for visualizing microscopic particle behavior.
 
 ## **Implementation**
 
