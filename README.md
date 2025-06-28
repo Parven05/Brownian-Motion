@@ -43,3 +43,6 @@ Since gravity is set to zero, the total force equals just the random force. Howe
 ```
 This code updates the particle's velocity and position using Verlet Integration.
 
+## **References**
+https://en.wikipedia.org/wiki/Brownian_motion
+
