@@ -33,7 +33,8 @@ Since gravity is set to zero, the total force equals just the random force. Howe
 
 ```math
 3. \quad \mathbf{v} = \mathbf{v} + \frac{\mathbf{F}_{\text{total}}}{m} \cdot \Delta t
-
+```
+```math
 4. \quad \mathbf{x} = \mathbf{x} + \mathbf{v} \cdot \Delta t
 ```
 ```c++
